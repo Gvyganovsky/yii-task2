@@ -16,32 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="applications-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Applications', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id_application',
-            'user_id',
-            'carNumber',
-            'description:ntext',
-            'Status',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Applications $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id_application' => $model->id_application]);
-                 }
-            ],
-        ],
-    ]); ?>
-
-
+    <?php foreach ($applications as $model): ?>
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-body">
+                <h5 class="card-title">Номер машины: <?= Html::encode($model->carNumber) ?></h5>
+                <p class="card-text">Описание: <?= Html::encode($model->description) ?></p>
+                <p class="card-text">Статус: <?= Html::encode($model->Status) ?></p>
+                <a href="/applications/<?= $model->id_application ?>" class="btn btn-primary">Просмотр заявки</a>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>

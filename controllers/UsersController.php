@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use yii;
 use app\models\RegForm;
 use app\models\Users;
 use app\models\UsersSearch;
@@ -14,6 +15,20 @@ use yii\filters\VerbFilter;
  */
 class UsersController extends Controller
 {
+    public function beforeAction($action)
+    {
+        if ($action->id === 'create') {
+            return true;
+        }
+            
+        if (Yii::$app->user->isGuest || Yii::$app->user->identity->admin != 1) {
+            $this->redirect(['/site/login']);
+            return false;
+        }
+        
+        return parent::beforeAction($action);
+    }
+
     /**
      * @inheritDoc
      */

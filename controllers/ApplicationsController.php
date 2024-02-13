@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use yii;
 use app\models\Applications;
 use app\models\ApplicationsSearch;
 use yii\web\Controller;
@@ -13,6 +14,19 @@ use yii\filters\VerbFilter;
  */
 class ApplicationsController extends Controller
 {
+    public function beforeAction($action)
+    {
+        if ($action->id === 'create' ) {
+            return true;
+        }
+            
+        if (Yii::$app->user->isGuest) {
+            $this->redirect(['/site/login']);
+            return false;
+        }
+        return parent::beforeAction($action);
+    }
+
     /**
      * @inheritDoc
      */
@@ -38,12 +52,23 @@ class ApplicationsController extends Controller
      */
     public function actionIndex()
     {
+        // Получаем ID текущего пользователя
+        $userId = Yii::$app->user->id;
+    
+        // Получаем заявки, принадлежащие текущему пользователю
+        $applications = Applications::find()->where(['user_id' => $userId])->all(); 
+    
+        // Создаем экземпляр поисковой модели
         $searchModel = new ApplicationsSearch();
+    
+        // Передаем параметры запроса в поисковую модель
         $dataProvider = $searchModel->search($this->request->queryParams);
-
+    
+        // Возвращаем представление
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'applications' => $applications,
         ]);
     }
 
@@ -68,19 +93,25 @@ class ApplicationsController extends Controller
     public function actionCreate()
     {
         $model = new Applications();
-
+    
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id_application' => $model->id_application]);
+            if ($model->load($this->request->post())) {
+                // Устанавливаем значение user_id перед сохранением
+                $model->user_id = Yii::$app->user->id;
+    
+                if ($model->save()) {
+                    return $this->redirect(['/applications/index']);
+                }
             }
         } else {
             $model->loadDefaultValues();
         }
-
+    
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+    
 
     /**
      * Updates an existing Applications model.

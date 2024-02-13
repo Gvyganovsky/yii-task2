@@ -48,6 +48,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'applications/<id_application:\d+>' => 'applications/view',
             ],
         ],
     ],
