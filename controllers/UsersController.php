@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\RegForm;
 use app\models\Users;
 use app\models\UsersSearch;
 use yii\web\Controller;
@@ -67,7 +68,7 @@ class UsersController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Users();
+        $model = new RegForm();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
