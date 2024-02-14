@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="applications-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+        <a href="/applications/create" class="btn btn-primary btn-lg" style="margin-bottom: 24px">Отправить заявку</a>
+
     <?php foreach ($applications as $model): ?>
         <div class="card" style="margin-bottom: 20px;">
             <div class="card-body">

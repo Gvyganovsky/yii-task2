@@ -19,8 +19,6 @@ use yii\widgets\ActiveForm;
         
         <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
         
-        <?= $form->field($model, 'Status')->dropDownList(['Новое' => 'Новое', 'Подтверждено' => 'Подтверждено', 'Отклонено' => 'Отклонено'], ['prompt' => '']) ?>
-        
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         </div>
